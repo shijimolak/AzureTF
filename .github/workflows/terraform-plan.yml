@@ -1,0 +1,30 @@
+name: Terraform Plan
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    env:
+      ARM_CLIENT_ID: e0807d48-eb64-4aa9-a0b6-99a44bb34f77
+      ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
+      ARM_SUBSCRIPTION_ID: 5a850d8e-29d4-4fea-850f-1340392f2a99
+      ARM_TENANT_ID: 92730a69-b5aa-4b8a-88b4-e8ff0fe2edb9
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Plan
+        run: terraform plan
